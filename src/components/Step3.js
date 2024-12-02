@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { AppContext } from '../AppContext';
+import Swal from 'sweetalert2';
 
 const Container = styled.div`
   background-color: #fff3e8;
@@ -79,7 +80,12 @@ function Step3({ onNext, onBack }) {
   const handleSubmit = () => {
     debugger
     if (!selectedOption) {
-      setErrors({ usage: 'Please select an option before proceeding.' });
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please select an option before proceeding.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
       return;
     }
 

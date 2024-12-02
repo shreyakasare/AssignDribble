@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { AppContext } from "../AppContext";
+import Swal from "sweetalert2";
 
 const Container = styled.div`
   background-color: #fff3e8;
@@ -65,6 +66,16 @@ function Step2({ onNext, onBack }) {
   };
 
   const handleNext = () => {
+    if (!localFormData.workspaceTitle || !localFormData.workspaceURL) {
+
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please fill out the fields.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
     setFormData((prev) => ({ ...prev, step2: localFormData }));
     onNext();
   };

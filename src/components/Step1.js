@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AppContext } from '../AppContext';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const Container = styled.div`
   background-color: #fff3e8;
@@ -53,6 +54,7 @@ const Button = styled.button`
 
 function Step1({ onNext }) {
   const { setFormData } = useContext(AppContext);
+  const [displayNameFlag, setDisabled] = useState(true)
   const [localFormData, setLocalFormData] = useState({
     fullName: '',
     displayName: '',
@@ -74,9 +76,26 @@ function Step1({ onNext }) {
   };
 
   const handleNext = () => {
+    if (!localFormData.fullName || !localFormData.displayName) {
+
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please fill out Full Name.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, step1: localFormData }));
     onNext();
   };
+
+
+  // const handleNext = () => {
+  //   setFormData((prev) => ({ ...prev, step1: localFormData }));
+  //   onNext();
+  // };
 
   return (
     <Container>
@@ -90,13 +109,17 @@ function Step1({ onNext }) {
           onChange={handleChange}
           placeholder="Full Name (First Middle Last)"
         />
+
         <Input
           type="text"
           name="displayName"
           value={localFormData.displayName}
           onChange={handleChange}
           placeholder="Display Name"
+          disabled={displayNameFlag} // Replace `someCondition` with your logic
         />
+
+
         <Button onClick={handleNext}>Next</Button>
       </Card>
     </Container>

@@ -1,51 +1,98 @@
-// components/Step2.js
-import React, { useState } from 'react';
+import React, { useContext, useState } from "react";
+import styled from "styled-components";
+import { AppContext } from "../AppContext";
+
+const Container = styled.div`
+  background-color: #fff3e8;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+`;
+
+const Card = styled.div`
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+`;
+
+const Title = styled.h1`
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #3c3c3c;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+`;
+
+const Button = styled.button`
+  background: #6a4ca8;
+  color: white;
+  padding: 0.8rem;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #593a8b;
+  }
+`;
 
 function Step2({ onNext, onBack }) {
-  const [formData, setFormData] = useState({ workspaceTitle: '', workspaceURL: '' });
-  const [errors, setErrors] = useState({});
-
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.workspaceTitle) newErrors.workspaceTitle = 'Workspace Title is required';
-    if (!formData.workspaceURL) newErrors.workspaceURL = 'Workspace URL is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const { setFormData } = useContext(AppContext);
+  const [localFormData, setLocalFormData] = useState({
+    workspaceTitle: "",
+    workspaceURL: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setLocalFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      onNext(formData);
-    }
+  const handleNext = () => {
+    setFormData((prev) => ({ ...prev, step2: localFormData }));
+    onNext();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="workspaceTitle"
-        value={formData.workspaceTitle}
-        onChange={handleChange}
-        placeholder="Workspace Title"
-      />
-      {errors.workspaceTitle && <p>{errors.workspaceTitle}</p>}
-      <input
-        type="text"
-        name="workspaceURL"
-        value={formData.workspaceURL}
-        onChange={handleChange}
-        placeholder="Workspace URL"
-      />
-      {errors.workspaceURL && <p>{errors.workspaceURL}</p>}
-      <button type="button" onClick={onBack}>Back</button>
-      <button type="submit">Next</button>
-    </form>
+    <Container>
+      <Card>
+        <Title>Let’s set up a home for all your work</Title>
+        <p>You can always create another workspace later.</p>
+        <Input
+          type="text"
+          name="workspaceTitle"
+          placeholder="Workspace Name"
+          value={localFormData.workspaceTitle}
+          onChange={handleChange}
+        />
+
+        <Input
+          type="text"
+          name="workspaceURL"
+          placeholder="Workspace URL (optional)"
+          value={localFormData.workspaceURL}
+          onChange={handleChange}
+        />
+
+        <Button onClick={handleNext}>Create Workspace</Button>
+      </Card>
+    </Container>
   );
 }
 

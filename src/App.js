@@ -6,35 +6,14 @@ import Step4 from './components/Step4';
 
 function App() {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({});
-
-  const handleNext = (data) => {
-    setFormData((prev) => ({ ...prev, ...data }));
-    setStep((prevStep) => prevStep + 1);
-  };
-
-  const handleBack = () => {
-    setStep((prevStep) => prevStep - 1);
-  };
-
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return <Step1 onNext={handleNext} />;
-      case 2:
-        return <Step2 onNext={handleNext} onBack={handleBack} />;
-      case 3:
-        return <Step3 onNext={handleNext} onBack={handleBack} />;
-      case 4:
-        return <Step4 />;
-      default:
-        return null;
-    }
-  };
+  const nextStep = () => setStep((prev) => prev + 1);
 
   return (
     <div>
-      {renderStep()}
+      {step === 1 && <Step1 onNext={nextStep} />}
+      {step === 2 && <Step2 onNext={nextStep} />}
+      {step === 3 && <Step3 onNext={nextStep} />}
+      {step === 4 && <Step4 />}
     </div>
   );
 }

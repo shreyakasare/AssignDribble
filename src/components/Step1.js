@@ -1,11 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { AppContext } from '../AppContext';
-import styled from 'styled-components';
-import Swal from 'sweetalert2';
-
+import React, { useState, useContext, useEffect } from "react";
+import { AppContext } from "../AppContext";
+import styled from "styled-components";
+import Swal from "sweetalert2";
+import "../App.css";
+import "../App1.css";
 const Container = styled.div`
-  background-color: #fff3e8;
-  height: 100vh;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,14 +17,13 @@ const Card = styled.div`
   background: white;
   padding: 2rem;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 90%;
   max-width: 400px;
   text-align: center;
 `;
 
 const Title = styled.h1`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 1rem;
   color: #3c3c3c;
 `;
@@ -53,17 +52,28 @@ const Button = styled.button`
 `;
 
 function Step1({ onNext }) {
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
+
+  const updateStep = (direction) => {
+    debugger
+    if (direction === "next" && currentStep < totalSteps) {
+      setCurrentStep((prev) => prev + 1);
+    } else if (direction === "prev" && currentStep > 1) {
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
+
   const { setFormData } = useContext(AppContext);
-  const [displayNameFlag, setDisabled] = useState(true)
+  const [displayNameFlag, setDisabled] = useState(true);
   const [localFormData, setLocalFormData] = useState({
-    fullName: '',
-    displayName: '',
+    fullName: "",
+    displayName: "",
   });
 
-
   useEffect(() => {
-    const nameParts = localFormData.fullName.split(' ').filter(Boolean);
-    const firstName = nameParts[0] || '';
+    const nameParts = localFormData.fullName.split(" ").filter(Boolean);
+    const firstName = nameParts[0] || "";
     setLocalFormData((prev) => ({
       ...prev,
       displayName: firstName,
@@ -76,26 +86,20 @@ function Step1({ onNext }) {
   };
 
   const handleNext = () => {
+    debugger
     if (!localFormData.fullName || !localFormData.displayName) {
-
       Swal.fire({
-        title: 'Error!',
-        text: 'Please fill out Full Name.',
-        icon: 'error',
-        confirmButtonText: 'OK',
+        title: "Error!",
+        text: "Please fill out Full Name.",
+        icon: "error",
+        confirmButtonText: "OK",
       });
       return;
     }
-
+    updateStep("next")
     setFormData((prev) => ({ ...prev, step1: localFormData }));
     onNext();
   };
-
-
-  // const handleNext = () => {
-  //   setFormData((prev) => ({ ...prev, step1: localFormData }));
-  //   onNext();
-  // };
 
   return (
     <Container>
@@ -119,8 +123,9 @@ function Step1({ onNext }) {
           disabled={displayNameFlag} // Replace `someCondition` with your logic
         />
 
-
-        <Button onClick={handleNext}>Next</Button>
+        <Button class="btn btn-next" id="btn-next" onClick={handleNext}>
+          Create Workspace
+        </Button>
       </Card>
     </Container>
   );

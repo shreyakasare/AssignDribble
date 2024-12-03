@@ -4,8 +4,8 @@ import { AppContext } from '../AppContext';
 import Swal from 'sweetalert2';
 
 const Container = styled.div`
-  background-color: #fff3e8;
-  height: 100vh;
+ background-color: #ffffff;
+  height: 65vh;
   display: flex;
   flex-direction: column;
   align-items: center;
